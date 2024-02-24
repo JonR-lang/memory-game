@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import confetti from "canvas-confetti";
 import * as icons from "react-icons/gi";
 import { Tile } from "./Tile";
 import useDarkMode from "./hooks/theme";
 import StarField from "./components/Star";
+import EndGame from "./components/EndGame";
+import Flip from "./assets/flip.wav";
+import WinSound from "./assets/bonus-point.mp3";
 
 export const possibleTileContents = [
   icons.GiHearts,
@@ -28,13 +31,13 @@ export function StartScreen({ start }) {
   return (
     <>
       <button
-        className='absolute inline-flex items-center custom-cursor-pointer right-3 top-3'
+        className='absolute inline-flex items-center custom-cursor-pointer right-3 top-3 z-10'
         onClick={handleDarkMode}>
         <div className="w-11 h-6 bg-sky-100 focus:outline-none focus:ring-2 rounded-full dark:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-orange-500 after:rounded-full after:h-5 after:w-5 after:transition-all dark:bg-darkGray dark:after:shadow-crescent dark:after:bg-darkGray shadow-md"></div>
       </button>
       <>
         <div className='w-full h-screen flex justify-center items-center p-8 dark:custom-bg-start-mobile dark:sm:custom-bg-start custom-cursor'>
-          <div className='w-full max-w-sm aspect-square bg-neutralClrOne rounded-xl flex justify-center items-center flex-col space-y-8 text-primaryClrOne dark:bg-pink-950/20 dark:text-pink-500/80'>
+          <div className='w-full max-w-sm aspect-square bg-neutralClrOne rounded-xl flex justify-center items-center flex-col space-y-8 text-primaryClrOne dark:bg-pink-950/20 dark:text-pink-500/80 z-10'>
             <h1 className='text-5xl font-bold'>Memory</h1>
             <p>Flip over tiles looking for pairs</p>
             <button
@@ -43,17 +46,21 @@ export function StartScreen({ start }) {
               Play
             </button>
           </div>
+          <StarField numStars={30} />
         </div>
       </>
     </>
   );
 }
 
-export function PlayScreen({ end }) {
+export function PlayScreen({ end, start }) {
   const [tiles, setTiles] = useState(null);
   const [tryCount, setTryCount] = useState(0);
   const [selectedValue, setSelectedValue] = useState(16);
+  const [showEndGame, setShowEndGame] = useState(true);
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const flipSoundRef = useRef(new Audio(Flip));
+  const winSoundRef = useRef(new Audio(WinSound));
 
   const handleDarkMode = () => {
     toggleDarkMode(!isDarkMode);
@@ -68,6 +75,20 @@ export function PlayScreen({ end }) {
     setTiles(null);
     setTryCount(0);
   }, [selectedValue]);
+
+  useEffect(() => {
+    //preload both sounds!
+    flipSoundRef.current.preload = "auto";
+    winSoundRef.current.preload = "auto";
+  });
+
+  const playFlipSound = () => {
+    flipSoundRef.current.play();
+  };
+
+  const playWinSound = () => {
+    winSoundRef.current.play();
+  };
 
   const getTiles = (tileCount) => {
     // Throw error if count is not even.
@@ -94,6 +115,7 @@ export function PlayScreen({ end }) {
   };
 
   const flip = (i) => {
+    playFlipSound();
     // Is the tile already flipped? We don’t allow flipping it back.
     if (tiles[i].state === "flipped") return;
 
@@ -115,6 +137,7 @@ export function PlayScreen({ end }) {
 
       if (alreadyFlippedTile.content === justFlippedTile.content) {
         setTimeout(() => {
+          playWinSound();
           confetti({
             ticks: 100,
             particleCount: 300,
@@ -135,7 +158,7 @@ export function PlayScreen({ end }) {
 
           // If all tiles are matched, the game is over.
           if (newTiles.every((tile) => tile.state === "matched")) {
-            setTimeout(end, 0);
+            setShowEndGame(true);
           }
 
           return newTiles;
@@ -153,7 +176,7 @@ export function PlayScreen({ end }) {
 
   return (
     <>
-      <div className='absolute right-3 top-3 flex gap-3 items-center'>
+      <div className='absolute right-3 top-3 flex gap-3 items-center z-10'>
         <div className='flex items-center gap-2 justify-center'>
           <p className='text-slate-800 dark:text-slate-300'>Level:</p>
           <select
@@ -173,13 +196,23 @@ export function PlayScreen({ end }) {
         </button>
       </div>
 
-      <div className='min-h-screen overflow-y-autow-full flex items-center justify-center p-4 flex-col gap-4 text-center dark:custom-bg-mobile dark:sm:custom-bg custom-cursor'>
+      <div className='min-h-screen overflow-y-auto w-full flex items-center justify-center p-4 flex-col gap-4 text-center dark:custom-bg-mobile dark:sm:custom-bg custom-cursor'>
         <span className='w-full flex items-center justify-center gap-2 text-xl text-accentClrOne sm:text-2xl lg:text-3xl'>
           Tries
           <span className='inline-block rounded-md bg-primaryClrTwo px-2 dark:bg-transparent sm:h-7 sm:-mt-1'>
             {tryCount}
           </span>
         </span>
+        {showEndGame && (
+          <EndGame
+            tryCount={tryCount}
+            start={start}
+            end={end}
+            setShowEndGame={setShowEndGame}
+            setTiles={setTiles}
+            setTryCount={setTryCount}
+          />
+        )}
 
         <StarField numStars={30} />
         <div

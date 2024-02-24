@@ -13,16 +13,48 @@ const Star = ({ initialX, initialY }) => {
     return () => clearInterval(intervalId);
   }, []);
 
-  return <motion.div></motion.div>;
+  return (
+    <motion.div
+      style={{
+        position: "absolute",
+        width: "2px",
+        height: "2px",
+        backgroundColor: "white",
+        borderRadius: "50%",
+        top: initialY,
+        left: initialX,
+      }}
+      animate={{
+        x: `${direction === 1 ? "100vw" : "-100vw"}`,
+        y: `${direction === 1 ? "100vh" : "-100vh"}`,
+      }}
+      transition={{
+        duration: speed,
+        ease: "linear",
+        repeat: Infinity,
+      }}
+    />
+  );
 };
 
 const StarField = ({ numStars }) => {
   const stars = useMemo(
-    () => [...Array(numStars)].map((_, index) => <Star />),
+    () =>
+      [...Array(numStars)].map((_, index) => (
+        <Star
+          key={index}
+          initialX={`${Math.random() * window.innerWidth}px`}
+          initialY={`${Math.random() * window.innerHeight}px`}
+        />
+      )),
     [numStars]
   );
 
-  return <div></div>;
+  return (
+    <div className='absolute inset-0 overflow-hidden hidden dark:block'>
+      {stars}
+    </div>
+  );
 };
 
 export default StarField;
