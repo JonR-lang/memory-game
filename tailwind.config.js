@@ -1,11 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: "class",
   content: ["./index.html", "./src/**/*.{js,jsx}"],
   theme: {
     extend: {
       colors: {
         neutralClrOne: "#FDF3F8",
+        neutralClrTwo: "#EEF2FF",
         primaryClrOne: "#E54891",
+        primaryClrTwo: "#A5B4FD",
+        accentClrOne: "#6466F1",
         darkGray: "#303136",
       },
       boxShadow: {

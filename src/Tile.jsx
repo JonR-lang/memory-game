@@ -1,48 +1,72 @@
+import { motion } from "framer-motion";
 export function Tile({ content: Content, flip, state }) {
-  switch (state) {
-    case "start":
-      return (
+  const containerVariants = {
+    start: { rotateY: 0, perspective: 500 },
+    flipped: { rotateY: 180, perspective: 500 },
+    matched: { rotateY: 180, perspective: 500 },
+  };
+
+  return (
+    <motion.div
+      variants={containerVariants}
+      initial="start"
+      transition={{
+        duration: 0.5,
+      }}
+      animate={state}
+      className={"inline-block size-full relative flip custom-cursor-pointer"}
+    >
+      {state !== "matched" && (
         <Back
-          className="inline-block h-8 w-8 bg-blue-300 text-center"
+          className={`flex size-full bg-primaryClrTwo rounded-lg z-20 dark:bg-slate-900 absolute`}
           flip={flip}
+          style={{
+            backfaceVisibility: "hidden",
+          }}
         />
-      );
-    case "flipped":
-      return (
-        <Front className="inline-block h-8 w-8 bg-green-500">
+      )}
+      {state !== "matched" && (
+        <Front
+          className={`size-full bg-accentClrOne rounded-lg flex items-center justify-center dark:bg-black/40 absolute ${
+            state === "flipped" && "dark:custom-shadow"
+          }`}
+        >
           <Content
             style={{
-              display: "inline-block",
-              width: "100%",
-              height: "100%",
-              verticalAlign: "top",
+              width: "80%",
+              height: "80%",
+              position: "absolute",
             }}
+            className="text-white dark:text-accentClrOne"
           />
         </Front>
-      );
-    case "matched":
-      return (
-        <Matched className="inline-block h-8 w-8 text-gray-300">
+      )}
+      {state === "matched" && (
+        <Matched className="size-full flex items-center justify-center relative">
           <Content
             style={{
-              display: "inline-block",
-              width: "100%",
-              height: "100%",
-              verticalAlign: "top",
+              width: "80%",
+              height: "80%",
+              position: "absolute",
+              color: "#c7d2ff",
             }}
+            className={"dark:opacity-50"}
           />
         </Matched>
-      );
-    default:
-      throw new Error("Invalid state " + state);
-  }
+      )}
+    </motion.div>
+  );
 }
 
 function Back({ className, flip }) {
   return (
-    <div onClick={flip} className={className}>
-      ?
-    </div>
+    <div
+      onClick={flip}
+      className={className}
+      style={{
+        backfaceVisibility: "hidden",
+      }}
+    ></div>
   );
 }
 

@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import confetti from "canvas-confetti";
 import * as icons from "react-icons/gi";
 import { Tile } from "./Tile";
+import useDarkMode from "./hooks/theme";
 
 export const possibleTileContents = [
   icons.GiHearts,
@@ -17,20 +18,34 @@ export const possibleTileContents = [
 ];
 
 export function StartScreen({ start }) {
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
+
+  const handleDarkMode = () => {
+    toggleDarkMode(!isDarkMode);
+  };
+
   return (
     <>
-      <div className="w-full h-screen flex justify-center items-center">
-        <div className="w-full max-w-sm aspect-square bg-neutralClrOne rounded-xl flex justify-center items-center flex-col space-y-8 text-primaryClrOne">
-          <h1 className="text-5xl font-bold">Memory</h1>
-          <p>Flip over tiles looking for pairs</p>
-          <button
-            onClick={start}
-            className="bg-primaryClrOne text-white p-3 px-12 rounded-full hover:scale-105 duration-200 ease-linear"
-          >
-            Play
-          </button>
+      <button
+        className="absolute inline-flex items-center custom-cursor-pointer right-3 top-3"
+        onClick={handleDarkMode}
+      >
+        <div className="w-11 h-6 bg-sky-100 focus:outline-none focus:ring-2 rounded-full dark:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-orange-500 after:rounded-full after:h-5 after:w-5 after:transition-all dark:bg-darkGray dark:after:shadow-crescent dark:after:bg-darkGray shadow-md"></div>
+      </button>
+      <>
+        <div className="w-full h-screen flex justify-center items-center p-8 dark:custom-bg-start-mobile dark:sm:custom-bg-start custom-cursor">
+          <div className="w-full max-w-sm aspect-square bg-neutralClrOne rounded-xl flex justify-center items-center flex-col space-y-8 text-primaryClrOne dark:bg-pink-950/20 dark:text-pink-500/80">
+            <h1 className="text-5xl font-bold">Memory</h1>
+            <p>Flip over tiles looking for pairs</p>
+            <button
+              onClick={start}
+              className="bg-primaryClrOne text-white p-3 px-12 rounded-full hover:scale-105 duration-200 ease-linear custom-cursor-pointer"
+            >
+              Play
+            </button>
+          </div>
         </div>
-      </div>
+      </>
     </>
   );
 }
@@ -38,6 +53,22 @@ export function StartScreen({ start }) {
 export function PlayScreen({ end }) {
   const [tiles, setTiles] = useState(null);
   const [tryCount, setTryCount] = useState(0);
+  const [selectedValue, setSelectedValue] = useState(16);
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
+
+  const handleDarkMode = () => {
+    toggleDarkMode(!isDarkMode);
+  };
+
+  const handleChange = (e) => {
+    const value = parseInt(e.target.value);
+    setSelectedValue(value);
+  };
+
+  useEffect(() => {
+    setTiles(null);
+    setTryCount(0);
+  }, [selectedValue]);
 
   const getTiles = (tileCount) => {
     // Throw error if count is not even.
@@ -84,9 +115,14 @@ export function PlayScreen({ end }) {
       let newState = "start";
 
       if (alreadyFlippedTile.content === justFlippedTile.content) {
-        confetti({
-          ticks: 100,
-        });
+        setTimeout(() => {
+          confetti({
+            ticks: 100,
+            particleCount: 300,
+            spread: 100,
+          });
+        }, 1000);
+
         newState = "matched";
       }
 
@@ -118,12 +154,45 @@ export function PlayScreen({ end }) {
 
   return (
     <>
-      <div>
-        {getTiles(6).map((tile, i) => (
-          <Tile key={i} flip={() => flip(i)} {...tile} />
-        ))}
+      <div className="absolute right-3 top-3 flex gap-3 items-center">
+        <div className="flex items-center gap-2 justify-center">
+          <p className="text-slate-800 dark:text-slate-300">Level:</p>
+          <select
+            value={selectedValue}
+            onChange={handleChange}
+            className="dark:bg-slate-950 dark:text-slate-400 px-2"
+          >
+            <option value="8">Easy</option>
+            <option value="16">Medium</option>
+            <option value="32">Hard</option>
+          </select>
+        </div>
+
+        <button
+          className="inline-flex items-center custom-cursor-pointer relative"
+          onClick={handleDarkMode}
+        >
+          <div className="w-11 h-6 bg-sky-100 focus:outline-none focus:ring-2 rounded-full dark:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-orange-500 after:rounded-full after:h-5 after:w-5 after:transition-all dark:bg-darkGray dark:after:shadow-crescent dark:after:bg-darkGray shadow-md"></div>
+        </button>
       </div>
-      {tryCount}
+
+      <div className="min-h-screen overflow-y-autow-full flex items-center justify-center p-4 flex-col gap-4 text-center dark:custom-bg-mobile dark:sm:custom-bg custom-cursor">
+        <span className="w-full flex items-center justify-center gap-2 text-xl text-accentClrOne sm:text-2xl lg:text-3xl">
+          Tries
+          <span className="inline-block rounded-md bg-primaryClrTwo px-2 dark:bg-transparent sm:h-7 sm:-mt-1">
+            {tryCount}
+          </span>
+        </span>
+        <div
+          className={
+            "w-full max-w-md aspect-square rounded-xl p-3 grid grid-cols-4 place-items-center gap-3 dark:bg-black/40 bg-neutralClrTwo"
+          }
+        >
+          {getTiles(selectedValue).map((tile, i) => (
+            <Tile key={i} flip={() => flip(i)} {...tile} />
+          ))}
+        </div>
+      </div>
     </>
   );
 }
