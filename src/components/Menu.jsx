@@ -30,60 +30,66 @@ const Menu = ({
     setTimeout(end, 0);
   };
 
-  const muteSound = () => {
+  const muteSound = (e) => {
+    e.stopPropagation();
     setSoundMuted(!soundMuted);
   };
 
-  const toggleMusic = () => {
+  const toggleMusic = (e) => {
+    e.stopPropagation();
     setMusicMuted(!musicMuted);
   };
 
   return (
     <div
-      className={`absolute p-1 top-2 left-3 z-10 flex flex-col  rounded-full overflow-hidden ${
-        showMenu && " dark:bg-white/10 dark:backdrop-blur-md bg-accentClrOne/20"
-      }`}>
-      <button
-        className='hover:bg-accentClrOne rounded-full dark:text-slate-400 text-accentClrOne hover:text-white dark:hover:text-white/80 p-1'
-        onClick={() => setShowMenu(!showMenu)}>
-        {showMenu ? (
-          <IoCloseOutline fontSize={45} />
-        ) : (
-          <CiMenuKebab fontSize={45} />
-        )}
-      </button>
-      <motion.div
-        className='mt-6 w-full flex flex-col gap-1 items-center'
-        initial='hidden'
-        animate={showMenu ? "visible" : "hidden"}
-        variants={menuVariants}>
-        <button className='hover:bg-accentClrOne rounded-full dark:text-slate-400 text-accentClrOne  dark:hover:text-white/80 hover:text-white p-2'>
-          <GrScorecard fontSize={35} />
-        </button>
+      className={`${showMenu && "fixed inset-0  z-20"}`}
+      onClick={() => setShowMenu(false)}>
+      <div
+        className={`absolute p-1 top-2 left-3 z-10 flex flex-col  rounded-full overflow-hidden ${
+          showMenu && " dark:bg-white/10 backdrop-blur-md bg-accentClrOne/20"
+        }`}>
         <button
-          className='hover:bg-accentClrOne rounded-full dark:text-slate-400 text-accentClrOne  dark:hover:text-white/80 p-2 hover:text-white'
-          onClick={toggleMusic}>
-          {!musicMuted ? (
-            <TbMusicOff fontSize={35} />
+          className='hover:bg-accentClrOne rounded-full dark:text-slate-400 text-accentClrOne hover:text-white dark:hover:text-white/80 p-1'
+          onClick={() => setShowMenu(!showMenu)}>
+          {showMenu ? (
+            <IoCloseOutline fontSize={45} />
           ) : (
-            <IoMusicalNotes fontSize={35} />
+            <CiMenuKebab fontSize={45} />
           )}
         </button>
-        <button
-          className='hover:bg-accentClrOne rounded-full dark:text-slate-400 text-accentClrOne  dark:hover:text-white/80 p-2 hover:text-white'
-          onClick={muteSound}>
-          {soundMuted ? (
-            <IoVolumeMedium fontSize={35} />
-          ) : (
-            <IoVolumeMute fontSize={35} />
-          )}
-        </button>
-        <button
-          className='hover:bg-accentClrOne rounded-full dark:text-slate-400 text-accentClrOne  dark:hover:text-white/80 p-2 hover:text-white'
-          onClick={closeGame}>
-          <IoExitOutline fontSize={35} />
-        </button>
-      </motion.div>
+        <motion.div
+          className='mt-6 w-full flex flex-col gap-1 items-center'
+          initial='hidden'
+          animate={showMenu ? "visible" : "hidden"}
+          variants={menuVariants}>
+          <button className='hover:bg-accentClrOne rounded-full dark:text-slate-400 text-accentClrOne  dark:hover:text-white/80 hover:text-white p-2'>
+            <GrScorecard fontSize={35} />
+          </button>
+          <button
+            className='hover:bg-accentClrOne rounded-full dark:text-slate-400 text-accentClrOne  dark:hover:text-white/80 p-2 hover:text-white'
+            onClick={toggleMusic}>
+            {!musicMuted ? (
+              <TbMusicOff fontSize={35} />
+            ) : (
+              <IoMusicalNotes fontSize={35} />
+            )}
+          </button>
+          <button
+            className='hover:bg-accentClrOne rounded-full dark:text-slate-400 text-accentClrOne  dark:hover:text-white/80 p-2 hover:text-white'
+            onClick={muteSound}>
+            {soundMuted ? (
+              <IoVolumeMedium fontSize={35} />
+            ) : (
+              <IoVolumeMute fontSize={35} />
+            )}
+          </button>
+          <button
+            className='hover:bg-accentClrOne rounded-full dark:text-slate-400 text-accentClrOne  dark:hover:text-white/80 p-2 hover:text-white'
+            onClick={closeGame}>
+            <IoExitOutline fontSize={35} />
+          </button>
+        </motion.div>
+      </div>
     </div>
   );
 };
