@@ -5,6 +5,7 @@ import { Tile } from "./Tile";
 import useDarkMode from "./hooks/theme";
 import StarField from "./components/Star";
 import EndGame from "./components/EndGame";
+import Menu from "./components/Menu";
 import Flip from "./assets/flip.wav";
 import WinSound from "./assets/bonus-point.mp3";
 
@@ -53,11 +54,12 @@ export function StartScreen({ start }) {
   );
 }
 
-export function PlayScreen({ end, start }) {
+export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
   const [tiles, setTiles] = useState(null);
   const [tryCount, setTryCount] = useState(0);
   const [selectedValue, setSelectedValue] = useState(16);
-  const [showEndGame, setShowEndGame] = useState(true);
+  const [showEndGame, setShowEndGame] = useState(false);
+  const [soundMuted, setSoundMuted] = useState(true);
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const flipSoundRef = useRef(new Audio(Flip));
   const winSoundRef = useRef(new Audio(WinSound));
@@ -83,11 +85,11 @@ export function PlayScreen({ end, start }) {
   });
 
   const playFlipSound = () => {
-    flipSoundRef.current.play();
+    if (soundMuted) flipSoundRef.current.play();
   };
 
   const playWinSound = () => {
-    winSoundRef.current.play();
+    if (soundMuted) winSoundRef.current.play();
   };
 
   const getTiles = (tileCount) => {
@@ -196,6 +198,14 @@ export function PlayScreen({ end, start }) {
         </button>
       </div>
 
+      <Menu
+        end={end}
+        soundMuted={soundMuted}
+        setSoundMuted={setSoundMuted}
+        musicMuted={musicMuted}
+        setMusicMuted={setMusicMuted}
+      />
+
       <div className='min-h-screen overflow-y-auto w-full flex items-center justify-center p-4 flex-col gap-4 text-center dark:custom-bg-mobile dark:sm:custom-bg custom-cursor'>
         <span className='w-full flex items-center justify-center gap-2 text-xl text-accentClrOne sm:text-2xl lg:text-3xl'>
           Tries
@@ -203,6 +213,7 @@ export function PlayScreen({ end, start }) {
             {tryCount}
           </span>
         </span>
+
         {showEndGame && (
           <EndGame
             tryCount={tryCount}
