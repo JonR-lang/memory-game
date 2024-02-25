@@ -4,7 +4,8 @@ const Timer = ({ seconds, minutes }) => {
   console.log("from Timer comp:", seconds, minutes);
   return (
     <div>
-      {minutes}:{seconds.toString().padStart(2, "0")}
+      {minutes.toString().padStart(2, "0")}:
+      {seconds.toString().padStart(2, "0")}
     </div>
   );
 };

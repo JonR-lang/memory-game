@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { possibleTileContents } from "../Screens";
+import useTimer from "../hooks/useTimer";
 
 const EndGame = ({
   start,
@@ -7,6 +8,7 @@ const EndGame = ({
   tryCount,
   setShowEndGame,
   setTiles,
+  resetTimer,
   setTryCount,
 }) => {
   //This is done to calculate the score factor:)
@@ -50,6 +52,7 @@ const EndGame = ({
             onClick={() => {
               setTiles(null);
               setTryCount(0);
+              resetTimer();
               setTimeout(start, 0);
               setShowEndGame(false);
             }}>

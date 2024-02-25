@@ -78,7 +78,7 @@ export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
   const [showEndGame, setShowEndGame] = useState(false);
   const [soundMuted, setSoundMuted] = useState(true);
   const { isDarkMode, toggleDarkMode } = useDarkMode();
-  const { seconds, minutes, startTimer, stopTimer } = useTimer();
+  const { seconds, minutes, startTimer, stopTimer, resetTimer } = useTimer();
   const flipSoundRef = useRef(new Audio(Flip));
   const winSoundRef = useRef(new Audio(WinSound));
   console.log("rendering again and again and again");
@@ -199,9 +199,9 @@ export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
 
   return (
     <>
-      <div className='absolute right-3 top-3 flex gap-3 items-center z-10'>
+      <div className='absolute right-3 top-3 flex gap-2 items-center z-10 justify-center'>
         <Timer seconds={seconds} minutes={minutes} />
-        <div className='flex items-center gap-2 justify-center'>
+        <div className='flex items-center gap-1 justify-center'>
           <p className='text-slate-800 dark:text-slate-300'>Level:</p>
           <select
             value={selectedValue}
@@ -244,6 +244,7 @@ export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
             setShowEndGame={setShowEndGame}
             setTiles={setTiles}
             setTryCount={setTryCount}
+            resetTimer={resetTimer}
           />
         )}
 

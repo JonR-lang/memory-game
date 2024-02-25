@@ -25,12 +25,18 @@ const useTimer = () => {
     intervalId.current = null;
   };
 
+  const resetTimer = () => {
+    setSeconds(0);
+    setMinutes(0);
+  };
+
   useEffect(() => {
     return () => clearInterval(intervalId.current); // Cleanup on unmount
   }, []);
 
   return {
     seconds,
+    resetTimer,
     minutes,
     startTimer,
     stopTimer,
