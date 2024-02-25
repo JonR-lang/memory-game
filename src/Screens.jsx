@@ -2,11 +2,18 @@ import { useEffect, useState, useRef } from "react";
 import confetti from "canvas-confetti";
 import * as icons from "react-icons/gi";
 import { Tile } from "./Tile";
+
+//hooks
 import useDarkMode from "./hooks/theme";
 import useTimer from "./hooks/useTimer";
+
+//components
 import StarField from "./components/Star";
 import EndGame from "./components/EndGame";
 import Menu from "./components/Menu";
+import Timer from "./components/Timer";
+
+//sounds
 import Flip from "./assets/flip.wav";
 import WinSound from "./assets/bonus-point.mp3";
 
@@ -74,6 +81,7 @@ export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
   const { seconds, minutes, startTimer, stopTimer } = useTimer();
   const flipSoundRef = useRef(new Audio(Flip));
   const winSoundRef = useRef(new Audio(WinSound));
+  console.log("rendering again and again and again");
 
   const handleDarkMode = () => {
     toggleDarkMode(!isDarkMode);
@@ -192,6 +200,7 @@ export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
   return (
     <>
       <div className='absolute right-3 top-3 flex gap-3 items-center z-10'>
+        <Timer seconds={seconds} minutes={minutes} />
         <div className='flex items-center gap-2 justify-center'>
           <p className='text-slate-800 dark:text-slate-300'>Level:</p>
           <select
