@@ -3,6 +3,7 @@ import confetti from "canvas-confetti";
 import * as icons from "react-icons/gi";
 import { Tile } from "./Tile";
 import useDarkMode from "./hooks/theme";
+import useTimer from "./hooks/useTimer";
 import StarField from "./components/Star";
 import EndGame from "./components/EndGame";
 import Menu from "./components/Menu";
@@ -22,8 +23,10 @@ export const possibleTileContents = [
   icons.GiOpenBook,
 ];
 
-export function StartScreen({ start }) {
+export function StartScreen({ start, musicMuted, setMusicMuted }) {
+  const [soundMuted, setSoundMuted] = useState(true);
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const inStartScreen = true;
 
   const handleDarkMode = () => {
     toggleDarkMode(!isDarkMode);
@@ -36,6 +39,13 @@ export function StartScreen({ start }) {
         onClick={handleDarkMode}>
         <div className="w-11 h-6 bg-sky-100 focus:outline-none focus:ring-2 rounded-full dark:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-orange-500 after:rounded-full after:h-5 after:w-5 after:transition-all dark:bg-darkGray dark:after:shadow-crescent dark:after:bg-darkGray shadow-md"></div>
       </button>
+      <Menu
+        soundMuted={soundMuted}
+        setSoundMuted={setSoundMuted}
+        musicMuted={musicMuted}
+        setMusicMuted={setMusicMuted}
+        inStartScreen={inStartScreen}
+      />
       <>
         <div className='w-full h-screen flex justify-center items-center p-8 dark:custom-bg-start-mobile dark:sm:custom-bg-start custom-cursor'>
           <div className='w-full max-w-sm aspect-square bg-neutralClrOne rounded-xl flex justify-center items-center flex-col space-y-8 text-primaryClrOne dark:bg-pink-950/20 dark:text-pink-500/80 z-10'>
@@ -61,6 +71,7 @@ export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
   const [showEndGame, setShowEndGame] = useState(false);
   const [soundMuted, setSoundMuted] = useState(true);
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const { seconds, minutes, startTimer, stopTimer } = useTimer();
   const flipSoundRef = useRef(new Audio(Flip));
   const winSoundRef = useRef(new Audio(WinSound));
 
@@ -118,6 +129,7 @@ export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
 
   const flip = (i) => {
     playFlipSound();
+    startTimer();
     // Is the tile already flipped? We don’t allow flipping it back.
     if (tiles[i].state === "flipped") return;
 
@@ -161,6 +173,7 @@ export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
           // If all tiles are matched, the game is over.
           if (newTiles.every((tile) => tile.state === "matched")) {
             setShowEndGame(true);
+            stopTimer();
           }
 
           return newTiles;

@@ -17,8 +17,13 @@ const Menu = ({
   setSoundMuted,
   musicMuted,
   setMusicMuted,
+  inStartScreen,
 }) => {
   const [showMenu, setShowMenu] = useState(false);
+  const startScreen =
+    "hover:bg-primaryClrOne rounded-full dark:text-slate-400 text-primaryClrOne dark:hover:text-white/80 hover:text-white";
+  const playScreen =
+    "hover:bg-accentClrOne rounded-full dark:text-slate-400 text-accentClrOne dark:hover:text-white/80 hover:text-white ";
 
   const menuVariants = {
     hidden: { height: 0 },
@@ -40,17 +45,22 @@ const Menu = ({
     setMusicMuted(!musicMuted);
   };
 
+  const handleClick = (e) => {
+    e.stopPropagation();
+    setShowMenu(!showMenu);
+  };
+
   return (
     <div
       className={`${showMenu && "fixed inset-0  z-20"}`}
       onClick={() => setShowMenu(false)}>
       <div
-        className={`absolute p-1 top-2 left-3 z-10 flex flex-col  rounded-full overflow-hidden ${
-          showMenu && " dark:bg-white/10 backdrop-blur-md bg-accentClrOne/20"
+        className={`absolute p-1 top-0 left-1 sm:left-3 z-30 flex flex-col  rounded-full overflow-hidden ${
+          showMenu && "dark:bg-white/10 backdrop-blur-md bg-accentClrOne/20"
         }`}>
         <button
-          className='hover:bg-accentClrOne rounded-full dark:text-slate-400 text-accentClrOne hover:text-white dark:hover:text-white/80 p-1'
-          onClick={() => setShowMenu(!showMenu)}>
+          className={`${inStartScreen ? startScreen : playScreen} p-1`}
+          onClick={handleClick}>
           {showMenu ? (
             <IoCloseOutline fontSize={45} />
           ) : (
@@ -62,11 +72,11 @@ const Menu = ({
           initial='hidden'
           animate={showMenu ? "visible" : "hidden"}
           variants={menuVariants}>
-          <button className='hover:bg-accentClrOne rounded-full dark:text-slate-400 text-accentClrOne  dark:hover:text-white/80 hover:text-white p-2'>
+          <button className={`${inStartScreen ? startScreen : playScreen} p-2`}>
             <GrScorecard fontSize={35} />
           </button>
           <button
-            className='hover:bg-accentClrOne rounded-full dark:text-slate-400 text-accentClrOne  dark:hover:text-white/80 p-2 hover:text-white'
+            className={`${inStartScreen ? startScreen : playScreen} p-2`}
             onClick={toggleMusic}>
             {!musicMuted ? (
               <TbMusicOff fontSize={35} />
@@ -75,7 +85,7 @@ const Menu = ({
             )}
           </button>
           <button
-            className='hover:bg-accentClrOne rounded-full dark:text-slate-400 text-accentClrOne  dark:hover:text-white/80 p-2 hover:text-white'
+            className={`${inStartScreen ? startScreen : playScreen} p-2`}
             onClick={muteSound}>
             {soundMuted ? (
               <IoVolumeMedium fontSize={35} />
@@ -83,11 +93,13 @@ const Menu = ({
               <IoVolumeMute fontSize={35} />
             )}
           </button>
-          <button
-            className='hover:bg-accentClrOne rounded-full dark:text-slate-400 text-accentClrOne  dark:hover:text-white/80 p-2 hover:text-white'
-            onClick={closeGame}>
-            <IoExitOutline fontSize={35} />
-          </button>
+          {!inStartScreen && (
+            <button
+              className={`${inStartScreen ? startScreen : playScreen} p-2`}
+              onClick={closeGame}>
+              <IoExitOutline fontSize={35} />
+            </button>
+          )}
         </motion.div>
       </div>
     </div>

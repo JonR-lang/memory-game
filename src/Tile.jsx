@@ -9,13 +9,12 @@ export function Tile({ content: Content, flip, state }) {
   return (
     <motion.div
       variants={containerVariants}
-      initial="start"
+      initial='start'
       transition={{
         duration: 0.5,
       }}
       animate={state}
-      className={"inline-block size-full relative flip custom-cursor-pointer"}
-    >
+      className={"inline-block size-full relative flip custom-cursor-pointer"}>
       {state !== "matched" && (
         <Back
           className={`flex size-full bg-primaryClrTwo rounded-lg z-20 dark:bg-slate-900 absolute`}
@@ -29,20 +28,19 @@ export function Tile({ content: Content, flip, state }) {
         <Front
           className={`size-full bg-accentClrOne rounded-lg flex items-center justify-center dark:bg-black/40 absolute ${
             state === "flipped" && "dark:custom-shadow"
-          }`}
-        >
+          }`}>
           <Content
             style={{
               width: "80%",
               height: "80%",
               position: "absolute",
             }}
-            className="text-white dark:text-accentClrOne"
+            className='text-white dark:text-accentClrOne'
           />
         </Front>
       )}
       {state === "matched" && (
-        <Matched className="size-full flex items-center justify-center relative">
+        <Matched className='size-full flex items-center justify-center relative'>
           <Content
             style={{
               width: "80%",
@@ -65,8 +63,7 @@ function Back({ className, flip }) {
       className={className}
       style={{
         backfaceVisibility: "hidden",
-      }}
-    ></div>
+      }}></div>
   );
 }
 
