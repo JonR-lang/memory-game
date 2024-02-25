@@ -30,6 +30,10 @@ const useTimer = () => {
     setMinutes(0);
   };
 
+  const getTotalSeconds = () => {
+    return minutes * 60 + seconds;
+  };
+
   useEffect(() => {
     return () => clearInterval(intervalId.current); // Cleanup on unmount
   }, []);
@@ -38,6 +42,7 @@ const useTimer = () => {
     seconds,
     resetTimer,
     minutes,
+    getTotalSeconds,
     startTimer,
     stopTimer,
   };

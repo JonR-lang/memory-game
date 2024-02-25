@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { possibleTileContents } from "../Screens";
-import useTimer from "../hooks/useTimer";
 
 const EndGame = ({
   start,
@@ -9,10 +8,16 @@ const EndGame = ({
   setShowEndGame,
   setTiles,
   resetTimer,
+  getTotalSeconds,
   setTryCount,
 }) => {
+  console.log(getTotalSeconds());
   //This is done to calculate the score factor:)
-  const score = Math.round((1 / parseInt(tryCount)) * 1000);
+  const tryFactor = Math.round((1 / parseInt(tryCount)) * 1000);
+  const timeFactor = Math.round((1 / parseInt(getTotalSeconds())) * 1000);
+  const score = tryFactor + timeFactor;
+
+  //get random icon
   const IconComponent =
     possibleTileContents[
       Math.floor(Math.random() * possibleTileContents.length)
