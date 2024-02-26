@@ -10,7 +10,7 @@ function App() {
   const [musicMuted, setMusicMuted] = useState(false);
   const bgMusic = new Audio(BackgroundMusic);
   bgMusic.preload = "auto";
-  bgMusic.volume = 0.2;
+  bgMusic.volume = 0.5;
 
   useEffect(() => {
     localStorage.setItem("memoryGame", JSON.stringify(gameState));
