@@ -13,10 +13,14 @@ import EndGame from "./components/EndGame";
 import Help from "./components/Help";
 import Menu from "./components/Menu";
 import Timer from "./components/Timer";
+import Scores from "./components/Scores";
 
 //sounds
 import Flip from "./assets/flip.wav";
 import WinSound from "./assets/bonus-point.mp3";
+
+//helperFunctions
+import saveScore from "./helperFunc/saveScore";
 
 export const possibleTileContents = [
   icons.GiHearts,
@@ -34,6 +38,7 @@ export const possibleTileContents = [
 export function StartScreen({ start, musicMuted, setMusicMuted }) {
   const [soundMuted, setSoundMuted] = useState(true);
   const [showHelp, setShowHelp] = useState(false);
+  const [showScores, setShowScores] = useState(false);
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const inStartScreen = true;
 
@@ -56,13 +61,19 @@ export function StartScreen({ start, musicMuted, setMusicMuted }) {
         setMusicMuted={setMusicMuted}
         inStartScreen={inStartScreen}
         setShowHelp={setShowHelp}
+        setShowScores={setShowScores}
       />
 
       {showHelp && <Help setShowHelp={setShowHelp} />}
 
+      {showScores && <Scores setShowScores={setShowScores} />}
+
       <>
         <div className='w-full h-screen flex justify-center items-center p-8 dark:custom-bg-start-mobile dark:sm:custom-bg-start custom-cursor'>
-          <div className='w-full max-w-md aspect-square bg-neutralClrOne rounded-xl flex justify-center items-center flex-col space-y-8 text-primaryClrOne dark:bg-pink-950/20 dark:text-pink-500/80 z-10'>
+          <div
+            className={
+              "w-full max-w-md aspect-square bg-neutralClrOne rounded-xl flex justify-center items-center flex-col space-y-8 text-primaryClrOne dark:bg-pink-950/20 dark:text-pink-500/80 z-10 dark:backdrop-blur-sm"
+            }>
             <h1 className='text-5xl font-bold'>Memory</h1>
             <p>Flip over tiles looking for pairs</p>
             <button
@@ -84,6 +95,7 @@ export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
   const [selectedValue, setSelectedValue] = useState(16);
   const [showEndGame, setShowEndGame] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
+  const [showScores, setShowScores] = useState(false);
   const [soundMuted, setSoundMuted] = useState(true);
 
   //hooks
@@ -199,9 +211,17 @@ export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
           }));
 
           // If all tiles are matched, the game is over.
+          //Also save the score to the local storage
           if (newTiles.every((tile) => tile.state === "matched")) {
             setShowEndGame(true);
             stopTimer();
+            saveScore(
+              tryCount,
+              seconds,
+              minutes,
+              selectedValue,
+              getTotalSeconds()
+            );
           }
 
           return newTiles;
@@ -247,6 +267,7 @@ export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
         musicMuted={musicMuted}
         setMusicMuted={setMusicMuted}
         setShowHelp={setShowHelp}
+        setShowScores={setShowScores}
       />
 
       <div className='min-h-screen overflow-y-auto w-full flex items-center justify-center p-4 flex-col gap-4 text-center dark:custom-bg-mobile dark:sm:custom-bg custom-cursor'>
@@ -260,6 +281,8 @@ export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
         {showEndGame && (
           <EndGame
             tryCount={tryCount}
+            seconds={seconds}
+            minutes={minutes}
             start={start}
             end={end}
             setShowEndGame={setShowEndGame}
@@ -272,8 +295,10 @@ export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
 
         {showHelp && <Help setShowHelp={setShowHelp} />}
 
+        {showScores && <Scores setShowScores={setShowScores} />}
+
         <StarField numStars={20} />
-        <div className='w-full backdrop-blur-md max-w-md aspect-square rounded-xl overflow-hidden'>
+        <div className='w-full backdrop-blur max-w-md aspect-square rounded-xl overflow-hidden'>
           <div
             className={
               "w-full h-full p-3 grid grid-cols-4 place-items-center gap-3 dark:bg-black/40 bg-neutralClrTwo "

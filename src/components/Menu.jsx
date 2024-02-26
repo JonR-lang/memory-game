@@ -20,6 +20,7 @@ const Menu = ({
   setMusicMuted,
   inStartScreen,
   setShowHelp,
+  setShowScores,
 }) => {
   const [showMenu, setShowMenu] = useState(false);
   const startScreen =
@@ -57,6 +58,11 @@ const Menu = ({
     setShowHelp(true);
   };
 
+  const showScores = () => {
+    setShowMenu(false);
+    setShowScores(true);
+  };
+
   return (
     <div
       className={`${showMenu && "fixed inset-0  z-20"}`}
@@ -79,7 +85,9 @@ const Menu = ({
           initial='hidden'
           animate={showMenu ? "visible" : "hidden"}
           variants={menuVariants}>
-          <button className={`${inStartScreen ? startScreen : playScreen} p-2`}>
+          <button
+            className={`${inStartScreen ? startScreen : playScreen} p-2`}
+            onClick={showScores}>
             <GrScorecard fontSize={35} />
           </button>
           <button

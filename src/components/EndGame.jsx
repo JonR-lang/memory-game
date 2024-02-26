@@ -1,10 +1,13 @@
 import { motion } from "framer-motion";
 import { possibleTileContents } from "../Screens";
+import calculateScore from "../helperFunc/calculateScore";
 
 const EndGame = ({
   start,
   end,
   tryCount,
+  seconds,
+  minutes,
   setShowEndGame,
   setTiles,
   resetTimer,
@@ -12,9 +15,7 @@ const EndGame = ({
   setTryCount,
 }) => {
   //This is done to calculate the score factor:)
-  const tryFactor = Math.round((1 / parseInt(tryCount)) * 1000);
-  const timeFactor = Math.round((1 / parseInt(getTotalSeconds())) * 1000);
-  const score = tryFactor + timeFactor;
+  const score = calculateScore(tryCount, getTotalSeconds());
 
   //get random icon
   const IconComponent =
@@ -38,8 +39,8 @@ const EndGame = ({
           delay: 0.5,
         }}>
         <div className='text-sm flex gap-2 absolute top-2 text-accentClrOne'>
-          <p>Tries :{tryCount}</p>
-          <p>Timer :{getTotalSeconds()}</p>
+          <p>Tries : {tryCount}</p>
+          <p>Finished in : {`${minutes}:${seconds}`}</p>
         </div>
         <div className='flex flex-col gap-2 mt-2 sm:mt-0'>
           <p className='text-slate-500'>Your Score</p>
