@@ -25,7 +25,7 @@ const EndGame = ({
   return (
     <div className='fixed bg-black/70 inset-0 w-full h-full z-20 flex justify-center items-center overflow-hidden p-6'>
       <motion.div
-        className='w-full sm:aspect-square max-w-sm bg-white/90 dark:bg-slate-800/50 dark:backdrop-blur-md rounded-xl flex flex-col justify-center items-center shadow-xl p-4 py-5 gap-3 border-2 border-accentClrOne '
+        className='w-full sm:aspect-square max-w-sm bg-white/90 dark:bg-slate-800/50 dark:backdrop-blur-md rounded-xl flex flex-col justify-center items-center shadow-xl p-4 py-5 gap-3 border-2 border-accentClrOne relative'
         initial={{
           y: 700,
         }}
@@ -41,7 +41,7 @@ const EndGame = ({
           <p>Tries :{tryCount}</p>
           <p>Timer :{getTotalSeconds()}</p>
         </div>
-        <div className='flex flex-col gap-2'>
+        <div className='flex flex-col gap-2 mt-2 sm:mt-0'>
           <p className='text-slate-500'>Your Score</p>
           <p className='text-6xl font-bold text-accentClrOne'>{score}</p>
         </div>
