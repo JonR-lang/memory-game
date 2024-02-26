@@ -273,13 +273,15 @@ export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
         {showHelp && <Help setShowHelp={setShowHelp} />}
 
         <StarField numStars={20} />
-        <div
-          className={
-            "w-full max-w-md aspect-square rounded-xl p-3 grid grid-cols-4 place-items-center gap-3 dark:bg-black/40 bg-neutralClrTwo  relative z-10 after:absolute after:inset-0 after:backdrop-blur-md "
-          }>
-          {getTiles(selectedValue).map((tile, i) => (
-            <Tile key={i} flip={() => flip(i)} {...tile} />
-          ))}
+        <div className='w-full backdrop-blur-md'>
+          <div
+            className={
+              "w-full max-w-md aspect-square rounded-xl p-3 grid grid-cols-4 place-items-center gap-3 dark:bg-black/40 bg-neutralClrTwo "
+            }>
+            {getTiles(selectedValue).map((tile, i) => (
+              <Tile key={i} flip={() => flip(i)} {...tile} />
+            ))}
+          </div>
         </div>
       </div>
     </>
