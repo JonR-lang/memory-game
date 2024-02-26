@@ -48,6 +48,7 @@ export function StartScreen({ start, musicMuted, setMusicMuted }) {
         onClick={handleDarkMode}>
         <div className="w-11 h-6 bg-sky-100 focus:outline-none focus:ring-2 rounded-full dark:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-orange-500 after:rounded-full after:h-5 after:w-5 after:transition-all dark:bg-darkGray dark:after:shadow-crescent dark:after:bg-darkGray shadow-md"></div>
       </button>
+
       <Menu
         soundMuted={soundMuted}
         setSoundMuted={setSoundMuted}
@@ -66,7 +67,7 @@ export function StartScreen({ start, musicMuted, setMusicMuted }) {
             <p>Flip over tiles looking for pairs</p>
             <button
               onClick={start}
-              className='bg-primaryClrOne text-white p-3 px-12 rounded-full hover:scale-105 duration-200 ease-linear custom-cursor-pointer'>
+              className='text-white dark:text-slate-900 bg-gradient-to-b from-primaryClrOne/30 to-primaryClrOne p-3 px-12 rounded-full hover:scale-105 duration-200 ease-linear custom-cursor-pointer'>
               Play
             </button>
           </div>
@@ -271,10 +272,10 @@ export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
 
         {showHelp && <Help setShowHelp={setShowHelp} />}
 
-        <StarField numStars={30} />
+        <StarField numStars={20} />
         <div
           className={
-            "w-full max-w-md aspect-square rounded-xl p-3 grid grid-cols-4 place-items-center gap-3 dark:bg-black/40 bg-neutralClrTwo"
+            "w-full max-w-md aspect-square rounded-xl p-3 grid grid-cols-4 place-items-center gap-3 dark:bg-black/40 bg-neutralClrTwo  relative z-10 after:absolute after:inset-0 after:backdrop-blur-md "
           }>
           {getTiles(selectedValue).map((tile, i) => (
             <Tile key={i} flip={() => flip(i)} {...tile} />

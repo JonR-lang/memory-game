@@ -11,7 +11,6 @@ const EndGame = ({
   getTotalSeconds,
   setTryCount,
 }) => {
-  console.log(getTotalSeconds());
   //This is done to calculate the score factor:)
   const tryFactor = Math.round((1 / parseInt(tryCount)) * 1000);
   const timeFactor = Math.round((1 / parseInt(getTotalSeconds())) * 1000);
@@ -22,6 +21,7 @@ const EndGame = ({
     possibleTileContents[
       Math.floor(Math.random() * possibleTileContents.length)
     ];
+
   return (
     <div className='fixed bg-black/70 inset-0 w-full h-full z-20 flex justify-center items-center overflow-hidden p-6'>
       <motion.div

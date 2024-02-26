@@ -14,7 +14,9 @@ export function Tile({ content: Content, flip, state }) {
         duration: 0.5,
       }}
       animate={state}
-      className={"inline-block size-full relative flip custom-cursor-pointer"}>
+      className={
+        "inline-block size-full flip custom-cursor-pointer relative z-10 "
+      }>
       {state !== "matched" && (
         <Back
           className={`flex size-full bg-primaryClrTwo rounded-lg z-20 dark:bg-slate-900 absolute`}
