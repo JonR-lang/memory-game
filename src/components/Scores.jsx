@@ -25,7 +25,7 @@ const Scores = ({ setShowScores }) => {
   return (
     <div className='fixed bg-black/70 inset-0 w-full h-full z-20 flex justify-center items-center overflow-hidden p-6'>
       <motion.div
-        className='w-full sm:aspect-square max-w-sm bg-white/90 dark:bg-slate-800/50 dark:backdrop-blur-md rounded-xl flex flex-col justify-center items-center shadow-xl p-4 py-5 gap-1 border-2 border-accentClrOne relative overflow-auto'
+        className='w-full aspect-square max-w-sm bg-white/90 dark:bg-slate-800/50 dark:backdrop-blur-md rounded-xl flex flex-col justify-center items-center shadow-xl p-4 py-5 gap-1 border-2 border-accentClrOne relative overflow-auto'
         initial={{
           y: 700,
         }}

@@ -242,7 +242,7 @@ export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
       <div className='absolute right-3 top-3 flex gap-2 items-center z-10 justify-center'>
         <Timer seconds={seconds} minutes={minutes} />
         <div className='flex items-center gap-1 justify-center'>
-          <p className='text-slate-800 dark:text-slate-300'>Level:</p>
+          <p className='text-slate-500'>Level:</p>
           <select
             value={selectedValue}
             onChange={handleChange}
