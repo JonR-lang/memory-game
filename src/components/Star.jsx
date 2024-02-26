@@ -26,10 +26,11 @@ const Star = ({ initialX, initialY }) => {
       }}
       animate={{
         x: `${direction === 1 ? "100vw" : "-100vw"}`,
-        y: `${direction === 1 ? "100vh" : "-100vh"}`,
+        y: `${Math.floor(Math.random() * -window.innerHeight)}px`,
       }}
       transition={{
         duration: speed,
+        type: "tween",
         ease: "linear",
         repeat: Infinity,
       }}

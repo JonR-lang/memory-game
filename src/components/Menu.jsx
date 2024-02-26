@@ -8,6 +8,7 @@ import {
 } from "react-icons/io5";
 import { GrScorecard } from "react-icons/gr";
 import { TbMusicOff } from "react-icons/tb";
+import { FaQuestion } from "react-icons/fa";
 import { useState } from "react";
 import { motion } from "framer-motion";
 
@@ -18,6 +19,7 @@ const Menu = ({
   musicMuted,
   setMusicMuted,
   inStartScreen,
+  setShowHelp,
 }) => {
   const [showMenu, setShowMenu] = useState(false);
   const startScreen =
@@ -50,12 +52,17 @@ const Menu = ({
     setShowMenu(!showMenu);
   };
 
+  const showHelp = () => {
+    setShowMenu(false);
+    setShowHelp(true);
+  };
+
   return (
     <div
       className={`${showMenu && "fixed inset-0  z-20"}`}
       onClick={() => setShowMenu(false)}>
       <div
-        className={`absolute p-1 top-0 left-1 sm:left-3 z-30 flex flex-col  rounded-full overflow-hidden ${
+        className={`absolute p-1 top-0 left-1 sm:left-3 z-20 flex flex-col  rounded-full overflow-hidden ${
           showMenu && "dark:bg-white/10 backdrop-blur-md bg-accentClrOne/20"
         }`}>
         <button
@@ -100,6 +107,11 @@ const Menu = ({
               <IoExitOutline fontSize={35} />
             </button>
           )}
+          <button
+            className={`${inStartScreen ? startScreen : playScreen} p-2`}
+            onClick={showHelp}>
+            <FaQuestion fontSize={30} />
+          </button>
         </motion.div>
       </div>
     </div>

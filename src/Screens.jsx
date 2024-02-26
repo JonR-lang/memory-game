@@ -10,6 +10,7 @@ import useTimer from "./hooks/useTimer";
 //components
 import StarField from "./components/Star";
 import EndGame from "./components/EndGame";
+import Help from "./components/Help";
 import Menu from "./components/Menu";
 import Timer from "./components/Timer";
 
@@ -32,6 +33,7 @@ export const possibleTileContents = [
 
 export function StartScreen({ start, musicMuted, setMusicMuted }) {
   const [soundMuted, setSoundMuted] = useState(true);
+  const [showHelp, setShowHelp] = useState(false);
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const inStartScreen = true;
 
@@ -52,10 +54,14 @@ export function StartScreen({ start, musicMuted, setMusicMuted }) {
         musicMuted={musicMuted}
         setMusicMuted={setMusicMuted}
         inStartScreen={inStartScreen}
+        setShowHelp={setShowHelp}
       />
+
+      {showHelp && <Help setShowHelp={setShowHelp} />}
+
       <>
         <div className='w-full h-screen flex justify-center items-center p-8 dark:custom-bg-start-mobile dark:sm:custom-bg-start custom-cursor'>
-          <div className='w-full max-w-sm aspect-square bg-neutralClrOne rounded-xl flex justify-center items-center flex-col space-y-8 text-primaryClrOne dark:bg-pink-950/20 dark:text-pink-500/80 z-10'>
+          <div className='w-full max-w-md aspect-square bg-neutralClrOne rounded-xl flex justify-center items-center flex-col space-y-8 text-primaryClrOne dark:bg-pink-950/20 dark:text-pink-500/80 z-10'>
             <h1 className='text-5xl font-bold'>Memory</h1>
             <p>Flip over tiles looking for pairs</p>
             <button
@@ -76,7 +82,10 @@ export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
   const [tryCount, setTryCount] = useState(0);
   const [selectedValue, setSelectedValue] = useState(16);
   const [showEndGame, setShowEndGame] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
   const [soundMuted, setSoundMuted] = useState(true);
+
+  //hooks
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const {
     seconds,
@@ -86,9 +95,10 @@ export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
     resetTimer,
     getTotalSeconds,
   } = useTimer();
+
+  //game audio
   const flipSoundRef = useRef(new Audio(Flip));
   const winSoundRef = useRef(new Audio(WinSound));
-  console.log("rendering again and again and again");
 
   const handleDarkMode = () => {
     toggleDarkMode(!isDarkMode);
@@ -97,6 +107,8 @@ export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
   const handleChange = (e) => {
     const value = parseInt(e.target.value);
     setSelectedValue(value);
+    stopTimer();
+    resetTimer();
   };
 
   useEffect(() => {
@@ -233,6 +245,7 @@ export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
         setSoundMuted={setSoundMuted}
         musicMuted={musicMuted}
         setMusicMuted={setMusicMuted}
+        setShowHelp={setShowHelp}
       />
 
       <div className='min-h-screen overflow-y-auto w-full flex items-center justify-center p-4 flex-col gap-4 text-center dark:custom-bg-mobile dark:sm:custom-bg custom-cursor'>
@@ -255,6 +268,8 @@ export function PlayScreen({ end, start, musicMuted, setMusicMuted }) {
             resetTimer={resetTimer}
           />
         )}
+
+        {showHelp && <Help setShowHelp={setShowHelp} />}
 
         <StarField numStars={30} />
         <div

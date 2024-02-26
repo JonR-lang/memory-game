@@ -10,15 +10,17 @@ const useTimer = () => {
       setSeconds(0);
       setMinutes(0);
       intervalId.current = setInterval(() => {
-        if (seconds === 59) {
-          setMinutes((prevMinutes) => prevMinutes + 1);
-          setSeconds(0);
-        } else {
-          setSeconds((prevSeconds) => prevSeconds + 1);
-        }
+        setSeconds((prevSeconds) => prevSeconds + 1);
       }, 1000);
     }
   };
+
+  useEffect(() => {
+    if (seconds === 59) {
+      setSeconds(0);
+      setMinutes((prevMinutes) => prevMinutes + 1);
+    }
+  }, [seconds]);
 
   const stopTimer = () => {
     clearInterval(intervalId.current);
