@@ -10,7 +10,7 @@ function App() {
   const [musicMuted, setMusicMuted] = useState(false);
   const bgMusic = new Audio(BackgroundMusic);
   bgMusic.preload = "auto";
-  bgMusic.volume = 0.1;
+  bgMusic.volume = 0.2;
 
   useEffect(() => {
     localStorage.setItem("memoryGame", JSON.stringify(gameState));
@@ -19,8 +19,17 @@ function App() {
   useEffect(() => {
     if (musicMuted) bgMusic.play();
 
+    bgMusic.addEventListener("ended", () => {
+      bgMusic.currentTime = 0;
+      bgMusic.play();
+    });
+
     return () => {
       bgMusic.pause();
+      bgMusic.removeEventListener("ended", () => {
+        bgMusic.currentTime = 0;
+        bgMusic.play();
+      });
     };
   }, [musicMuted]);
 
